@@ -13,7 +13,6 @@ class AlarmListTableViewController: UITableViewController, AlarmSchedulerDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        AlarmController.shared.loadFromPersistence()
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -23,8 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 print("Notification access has been denied")
             }
         }
-        
-        UNUserNotificationCenter.current().delegate = self
         
         return true
     }

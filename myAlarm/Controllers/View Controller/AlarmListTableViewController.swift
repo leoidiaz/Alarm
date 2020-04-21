@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AlarmListTableViewController: UITableViewController {
+class AlarmListTableViewController: UITableViewController, AlarmSchedulerDelegate {
     private let reuseIdentifier = "alarmCell"
 
     override func viewDidLoad() {
@@ -31,6 +31,7 @@ class AlarmListTableViewController: UITableViewController {
         let alarm = AlarmController.shared.alarms[indexPath.row]
         cell.delegate = self
         cell.alarm = alarm
+        AlarmController.shared.delegate = self
         return cell
     }
     

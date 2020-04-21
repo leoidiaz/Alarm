@@ -6,7 +6,12 @@
 //  Copyright © 2020 trevorAdcock. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
+protocol AlarmSchedulerDelegate: class {
+    func scheduleUserNotifications(for alarm: Alarm)
+    func cancelUserNotifications(for alarm: Alarm)
+}
 
 class AlarmController {
     
@@ -15,6 +20,9 @@ class AlarmController {
     
     //MARK: - Source of Truth
     var alarms = [Alarm]()
+    
+    /// Conform to delegate
+    weak var delegate: AlarmSchedulerDelegate?
     
     //MARK: - Mock Data
 //    var mockAlarms: [Alarm] = {
@@ -30,6 +38,7 @@ class AlarmController {
     func addAlarm(fireDate: Date, name: String, enabled: Bool){
         let newAlarm = Alarm(fireDate: fireDate, name: name, enabled: enabled)
         alarms.append(newAlarm)
+        delegate?.scheduleUserNotifications(for: newAlarm)
         saveForPersistence()
     }
     
@@ -37,17 +46,29 @@ class AlarmController {
         alarm.fireDate = fireDate
         alarm.name = name
         alarm.enabled = enabled
+        if alarm.enabled {
+            delegate?.scheduleUserNotifications(for: alarm)
+        } else {
+            delegate?.cancelUserNotifications(for: alarm)
+        }
         saveForPersistence()
     }
     
     func delete(alarm: Alarm){
         guard let indexPath = alarms.firstIndex(of: alarm) else { return }
         alarms.remove(at: indexPath)
+        delegate?.cancelUserNotifications(for: alarm)
         saveForPersistence()
     }
     
     func toggleEnabled(for alarm: Alarm){
         alarm.enabled = !alarm.enabled
+        if alarm.enabled {
+            delegate?.scheduleUserNotifications(for: alarm)
+        } else {
+            delegate?.cancelUserNotifications(for: alarm)
+        }
+        
     }
     
     //MARK: - Persistence
@@ -78,5 +99,30 @@ class AlarmController {
         } catch {
             print(error.localizedDescription)
         }
+    }
+}
+
+extension AlarmSchedulerDelegate {
+    func scheduleUserNotifications(for alarm: Alarm){
+        //Create notifcationContent
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.title = "TIME IS UP"
+        notificationContent.body = alarm.name
+        notificationContent.sound = .default
+        // Create date Component
+        let fireDate = alarm.fireDate
+        let dateComponent = Calendar.current.dateComponents([.hour, .minute], from: fireDate)
+        // Create Notification Trigger
+        let notificationTrigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: true)
+        // Create notification Request
+        let request = UNNotificationRequest(identifier: alarm.uuid, content: notificationContent, trigger: notificationTrigger)
+        UNUserNotificationCenter.current().add(request) { (error) in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    func cancelUserNotifications(for alarm: Alarm) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [alarm.uuid])
     }
 }

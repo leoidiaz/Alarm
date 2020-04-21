@@ -7,7 +7,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Alarm List Table View Controller-->
+        <!--Alarm-->
         <scene sceneID="zvf-6I-USC">
             <objects>
                 <tableViewController id="Hyy-Sn-b6a" customClass="AlarmListTableViewController" customModule="myAlarm" customModuleProvider="target" sceneMemberID="viewController">
@@ -23,7 +23,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="G0I-bn-Qd7">
+                                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="G0I-bn-Qd7">
                                             <rect key="frame" x="10" y="10" width="355" height="50"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="Wq2-Kx-pDd">
@@ -43,11 +43,12 @@
                                                         </label>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="QQq-GG-8p6"/>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="65" id="Z2N-6h-HYJ"/>
                                                     </constraints>
                                                 </stackView>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uDs-BY-PCg">
-                                                    <rect key="frame" x="306" y="0.0" width="51" height="50"/>
+                                                    <rect key="frame" x="306" y="9.6666666666666679" width="51" height="31.000000000000004"/>
+                                                    <color key="onTintColor" systemColor="systemTealColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <connections>
                                                         <action selector="switchValueChanged:" destination="7Vj-pr-tIA" eventType="valueChanged" id="XcF-HD-Ofu"/>
                                                     </connections>
@@ -77,7 +78,7 @@
                             <outlet property="delegate" destination="Hyy-Sn-b6a" id="sny-3N-uen"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="z9z-eR-NbW">
+                    <navigationItem key="navigationItem" title="Alarm" id="z9z-eR-NbW">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="TcK-oK-5SI">
                             <connections>
                                 <segue destination="1VM-2J-v93" kind="show" id="AXf-BT-rdy"/>

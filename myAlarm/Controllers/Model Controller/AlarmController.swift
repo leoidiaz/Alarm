@@ -17,36 +17,66 @@ class AlarmController {
     var alarms = [Alarm]()
     
     //MARK: - Mock Data
-    var mockAlarms: [Alarm] = {
-        return [Alarm(fireDate: Date(), name: "Good Afternoon", enabled: true),
-                Alarm(fireDate: Date(), name: "Good Afternoon2", enabled: false)]
-    }()
+//    var mockAlarms: [Alarm] = {
+//        return [Alarm(fireDate: Date(), name: "Good Afternoon", enabled: true),
+//                Alarm(fireDate: Date(), name: "Good Afternoon2", enabled: false)]
+//    }()
     
-    init() {
-        self.alarms = self.mockAlarms
-    }
+//    init() {
+//        self.alarms = self.mockAlarms
+//    }
     //MARK: - CRUD
     
     func addAlarm(fireDate: Date, name: String, enabled: Bool){
         let newAlarm = Alarm(fireDate: fireDate, name: name, enabled: enabled)
         alarms.append(newAlarm)
-        //Save
+        saveForPersistence()
     }
     
     func update(alarm: Alarm, fireDate: Date, name: String, enabled: Bool){
         alarm.fireDate = fireDate
         alarm.name = name
         alarm.enabled = enabled
-        //Save
+        saveForPersistence()
     }
     
     func delete(alarm: Alarm){
         guard let indexPath = alarms.firstIndex(of: alarm) else { return }
         alarms.remove(at: indexPath)
-        //Save
+        saveForPersistence()
     }
     
     func toggleEnabled(for alarm: Alarm){
         alarm.enabled = !alarm.enabled
+    }
+    
+    //MARK: - Persistence
+    
+    func createFileForPersistentStore() -> URL {
+        let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let fileURL = url[0].appendingPathComponent("myAlarm.json")
+        return fileURL
+    }
+    
+    
+    func saveForPersistence() {
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(alarms)
+            try data.write(to: createFileForPersistentStore())
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func loadFromPersistence() {
+        let decoder = JSONDecoder()
+        do {
+            let data = try Data(contentsOf: createFileForPersistentStore())
+            let decodedData = try decoder.decode([Alarm].self, from: data)
+            alarms = decodedData
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }

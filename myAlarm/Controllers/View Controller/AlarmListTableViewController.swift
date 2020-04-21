@@ -13,6 +13,7 @@ class AlarmListTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        AlarmController.shared.loadFromPersistence()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,7 +36,6 @@ class AlarmListTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            guard let indexPath = tableView.indexPathForSelectedRow else { return }
             let alarm = AlarmController.shared.alarms[indexPath.row]
             AlarmController.shared.delete(alarm: alarm)
             tableView.deleteRows(at: [indexPath], with: .automatic)
